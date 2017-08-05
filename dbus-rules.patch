@@ -1,0 +1,9 @@
+Index: polkit-0.107/data/org.freedesktop.PolicyKit1.service.in
+===================================================================
+--- polkit-0.107.orig/data/org.freedesktop.PolicyKit1.service.in
++++ polkit-0.107/data/org.freedesktop.PolicyKit1.service.in
+@@ -2,4 +2,3 @@
+ Name=org.freedesktop.PolicyKit1
+ Exec=@libprivdir@/polkitd --no-debug
+ User=root
+-SystemdService=polkit.service

@@ -3,8 +3,8 @@
 # 						Maintainer: Jan de Groot <jgc@archlinux.org>
 
 pkgname=polkit
-pkgver=0.113+29+g3272a98
-pkgrel=3
+pkgver=0.113+34+g29ba7af
+pkgrel=2
 pkgdesc="Application development toolkit for controlling system-wide privileges"
 arch=(x86_64)
 license=(LGPL)
@@ -14,14 +14,15 @@ makedepends=(intltool gtk-doc gobject-introspection git autoconf-archive)
 provides=('polkit-consolekit')
 replaces=('polkit-consolekit')
 conflicts=('polkit-consolekit')
-install=polkit.install
-_commit=3272a988655c3236b55bad70e9a3af20857f384b  # master
+_commit=29ba7afba1b79a325183a71966f35926dfdf506e # master
 source=("git+https://anongit.freedesktop.org/git/polkit#commit=$_commit"
 		"dbus-rules.patch"
-		"polkit.pam")
+		"polkit.pam"
+		"polkit.sysusers")
 md5sums=('SKIP'
          'e8e65e9291d83c4b91fa8de424a938ef'
-         '6564f95878297b954f0572bc1610dd15')
+         '6564f95878297b954f0572bc1610dd15'
+         '57b3a16112267fa099c06de443dafd56')
 validpgpkeys=('6DD4217456569BA711566AC7F06E8FDE7B45DAAC') # Eric Vidal
 
 pkgver() {
@@ -49,7 +50,7 @@ build() {
   ./configure 	--prefix=/usr \
 				--sysconfdir=/etc \
 				--localstatedir=/var \
-				--libexecdir=/usr/lib/polkit-1 \
+				--libexecdir=/usr/lib/ \
 				--enable-libsystemd-login=no \
 				--with-systemdsystemunitdir=no \
 				--disable-static \
@@ -72,7 +73,9 @@ check(){
 package() {
   cd ${pkgname}
   make DESTDIR="$pkgdir" install
-
+  
+  install -Dm644 "$srcdir/polkit.sysusers" "$pkgdir/usr/lib/sysusers.d/polkit.conf"
+  
   chown root:102 "$pkgdir"/{etc,usr/share}/polkit-1/rules.d
   chmod 750      "$pkgdir"/{etc,usr/share}/polkit-1/rules.d
   

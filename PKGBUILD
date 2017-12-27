@@ -76,8 +76,7 @@ package() {
   
   install -Dm644 "$srcdir/polkit.sysusers" "$pkgdir/usr/lib/sysusers.d/polkit.conf"
   
-  chown root:102 "$pkgdir"/{etc,usr/share}/polkit-1/rules.d
-  chmod 750      "$pkgdir"/{etc,usr/share}/polkit-1/rules.d
+  install -d -o root -g 102 -m 750 "$pkgdir"/{etc,usr/share}/polkit-1/rules.d
   
   install -m644 "$srcdir/polkit.pam" "$pkgdir/etc/pam.d/polkit-1"
 

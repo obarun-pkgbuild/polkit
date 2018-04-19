@@ -3,18 +3,18 @@
 # 						Maintainer: Jan de Groot <jgc@archlinux.org>
 
 pkgname=polkit
-pkgver=0.113+34+g29ba7af
+pkgver=0.114
 pkgrel=2
 pkgdesc="Application development toolkit for controlling system-wide privileges"
 arch=(x86_64)
 license=(LGPL)
 url="https://www.freedesktop.org/wiki/Software/polkit"
-depends=(glib2 pam expat js)
+depends=(glib2 pam expat js52)
 makedepends=(intltool gtk-doc gobject-introspection git autoconf-archive)
 provides=('polkit-consolekit')
 replaces=('polkit-consolekit')
 conflicts=('polkit-consolekit')
-_commit=29ba7afba1b79a325183a71966f35926dfdf506e # master
+_commit=ed06baed179166389d536420a6fc532781d48178 # tags/0.114^0
 source=("git+https://anongit.freedesktop.org/git/polkit#commit=$_commit"
 		"dbus-rules.patch"
 		"polkit.pam"
@@ -33,7 +33,7 @@ pkgver() {
 prepare(){
 	
 	cd ${pkgname}
-
+	git cherry-pick -n 373705b35e7f6c7dc83de5e0a3ce11ecd15d0409
 	#patch remove systemd service for dbus rules
 	patch -Np1 -i ${srcdir}/dbus-rules.patch
 
@@ -53,8 +53,9 @@ build() {
 				--libexecdir=/usr/lib/ \
 				--enable-libsystemd-login=no \
 				--with-systemdsystemunitdir=no \
-				--disable-static \
-				--enable-gtk-doc \
+				--enable-libelogind=no \
+				--enable-static=no \
+				--enable-gtk-doc=yes \
 				--with-os-type=redhat \
 				--with-polkitd-user=polkitd \
 				--with-authfw=pam \
